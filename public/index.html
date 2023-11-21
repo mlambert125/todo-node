@@ -3,10 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/site.css">
+    <title>My Todo Lists</title>
+    <link rel="stylesheet" href="css/site.css" />
+    <script type="module">
+        import api from './js/api.js';
+        import './js/todo-list-master.js';
+        import './js/todo-list-create-form.js';
+
+        const createForm = document.querySelector('todo-list-create-form');
+        const master = document.querySelector('todo-list-master');
+
+        createForm.addEventListener('list-created', async () => {
+            await master.loadLists();
+        });
+
+        document.getElementById('logout').addEventListener('click', api.logout);
+    </script>
 </head>
 <body>
-    <h1>ToDo</h1>    
+    <div class="container">
+        <h1>Todo Lists</h1>    
+        <button id="logout">Log Out</button>
+
+        <todo-list-create-form></todo-list-create-form>
+        <todo-list-master></todo-list-master>
+    </div>
 </body>
 </html>

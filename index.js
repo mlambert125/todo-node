@@ -43,6 +43,13 @@ app.get('/api/todos', verifyToken, async (req, res) => {
     res.send(todos);
 });
 
+app.get('/api/todos/:id', verifyToken, async (req, res) => {
+    const id = req.params.id;
+    const todo = await db.collection('todo-lists').findOne({ _id: new mongodb.ObjectId(id), author: req.user.username });
+    res.setHeader('Content-Type', 'application/json');
+    res.send(todo);
+});
+
 app.post('/api/todos', verifyToken, async (req, res) => {
     const todo = req.body;
     todo.author = req.user.username;
@@ -51,19 +58,19 @@ app.post('/api/todos', verifyToken, async (req, res) => {
 });
 
 app.put('/api/todos/:id', verifyToken, async (req, res) => {    
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     const todo = req.body;
 
     todo.author = req.user.username;
-    await db.collection('todo-lists').updateOne({ _id: id, author: req.user.username }, { $set: todo });
+    todo._id = new mongodb.ObjectId(id);
+
+    await db.collection('todo-lists').updateOne({ _id: new mongodb.ObjectId(id), author: req.user.username }, { $set: todo });
     res.send(todo);    
 });
 
 app.delete('/api/todos/:id', verifyToken, async (req, res) => {
-    const id = parseInt(req.params.id);
-    const result = await db.collection('todo-lists').deleteOne({ _id: id, author: req.user.username });
-
-    console.log(result);
+    const id = req.params.id;
+    const result = await db.collection('todo-lists').deleteOne({ _id: new mongodb.ObjectId(id), author: req.user.username });
     res.send({ "message": "Todo list " + id + " deleted" });
 });
 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List - Register</title>
+    <link rel="stylesheet" href="css/site.css" />
+    <script type="module">
+        import api from './js/api.js';
+        
+        document.getElementById('register').addEventListener('click', async () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const successful = await api.register(username, password);
+
+            if (successful) {
+                document.getElementById('form').style.display = 'none';
+                document.getElementById('error').style.display = 'none';
+                document.getElementById('success').style.display = 'block';
+            } else {
+                document.getElementById('form').style.display = 'block';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('success').style.display = 'none';
+            }
+        });
+    </script>    
+
+    <style>
+        #form {
+            display: block;
+        }
+
+        #success {
+            display: none;
+        }
+
+        #error {
+            display: none;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>ToDo List - Register</h1>
+
+        <div class="form">
+
+            <label>
+                <span>Username</span>
+                <input type="text" id="username" placeholder="Username" />
+            </label>
+
+            <label>
+                <span>Password</span>
+                <input type="password" id="password" placeholder="Password" />
+            </label>
+            <button id="register">Register</button>    
+        </div>
+        
+        <div id="success">
+            <p>Successfully registered!</p>
+            <a href="login.html">Login</a>
+        </div>
+
+        <div id="error">
+            <p>Username already exists!</p>        
+        </div>
+    </div>
+</body>
+</html>

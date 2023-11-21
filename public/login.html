@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List - Login</title>
+    <link rel="stylesheet" href="css/site.css" />
+    <script type="module">
+        import api from './js/api.js';
+        
+        document.getElementById('login').addEventListener('click', async () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, password: password })
+            });
+
+            if (response.ok) {
+                // put token in local storage
+                const responseObject = await response.json();
+                localStorage.setItem('token', responseObject.token);
+
+                window.location.href = '/';
+            } else {
+                document.getElementById('error').innerText = 'Invalid username or password';
+            }
+        });
+    </script>
+    <style>
+        .register {
+            text-align: center;
+        }
+    </style> 
+</head>
+<body>
+    <div class="container">
+        <h1>ToDo List - Login</h1>
+
+        <div class="form">
+
+            <label>
+                <span>Username</span>
+                <input type="text" id="username" placeholder="Username" />
+            </label>
+
+            <label>
+                <span>Password</span>
+                <input type="password" id="password" placeholder="Password" />
+            </label>
+            <button id="login">Login</button>    
+        </div>
+
+        <span id="error"></span>
+        
+        <div class="register">
+            <span>Don't have an account?</span>
+            <a href="register.html">Register</a>
+        </div>
+    </div>
+</body>
+</html>
